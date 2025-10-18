@@ -3,445 +3,353 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Matriz das 4 Ações - Oceano Azul</title>
+    <title>Matriz das 4 Ações - Oceano Azul (Vanilla JS)</title>
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
 
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
 
-    <!-- React UMD (produção) -->
-    <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
-    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
-
-    <!-- Babel para compilar JSX no navegador -->
-    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
-
-    <!-- Ícones Lucide vanilla -->
+    <!-- Lucide Icons (vanilla) -->
     <script src="https://unpkg.com/lucide@latest"></script>
 
-    <!-- html2canvas para exportar PNG -->
+    <!-- html2canvas para exportação -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 
     <style>
-      svg.lucide { display: inline-block; vertical-align: middle; }
       html, body { height: 100%; }
-      .icon-btn { display: inline-flex; align-items: center; gap: 6px; }
+      .icon { display:inline-block; vertical-align: middle; }
     </style>
   </head>
   <body class="bg-gray-50 min-h-screen">
-    <div id="root"></div>
+    <div id="app" class="w-full min-h-screen bg-gray-50 flex flex-col">
+      <div class="bg-gradient-to-r from-blue-600 to-purple-600 text-white shadow-lg p-4">
+        <div class="max-w-7xl mx-auto">
+          <div class="flex items-center justify-center gap-2 mb-1">
+            <i data-lucide="lightbulb" class="icon" width="28" height="28"></i>
+            <h1 class="text-2xl font-bold">Matriz das 4 Ações - Oceano Azul</h1>
+          </div>
+          <p class="text-center text-sm opacity-90">Construa sua Estratégia de Oceano Azul</p>
+        </div>
+      </div>
 
-    <script type="text/babel">
-      const { useState, useRef, useEffect, Fragment } = React;
+      <div class="flex-1 overflow-y-auto p-4">
+        <div class="max-w-7xl mx-auto space-y-4">
 
-      function MatrizOceanoAzul() {
-        const [nomeGrupo, setNomeGrupo] = useState('Exemplo do Livro');
-        const [proposta, setProposta] = useState('Yellow Tail - Vinhos');
-        const exportRef = useRef(null);
+          <div class="bg-white rounded-lg shadow-md p-4">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-3">
+              <div>
+                <label class="block text-sm font-medium mb-1 text-gray-700">Nome do Grupo:</label>
+                <input id="nomeGrupo" type="text" placeholder="Ex: Grupo A"
+                       class="w-full p-2 border rounded text-sm focus:outline-none focus:ring-2 focus:ring-blue-500" />
+              </div>
+              <div>
+                <label class="block text-sm font-medium mb-1 text-gray-700">Proposta:</label>
+                <input id="proposta" type="text" placeholder="Ex: Supermercado Premium"
+                       class="w-full p-2 border rounded text-sm focus:outline-none focus:ring-2 focus:ring-blue-500" />
+              </div>
+              <div class="flex items-end gap-2">
+                <button id="btnExportar"
+                        class="flex-1 inline-flex items-center justify-center gap-2 p-2 rounded font-semibold text-sm bg-green-500 text-white hover:bg-green-600 transition">
+                  <i data-lucide="download" class="icon"></i>
+                  Exportar
+                </button>
+                <button id="btnReset" class="p-2 rounded bg-blue-100 text-blue-600 hover:bg-blue-200 transition" title="Resetar Yellow Tail">
+                  <i data-lucide="refresh-cw" class="icon"></i>
+                </button>
+              </div>
+              <div class="flex items-end">
+                <button id="btnLimpar" class="w-full p-2 bg-red-500 text-white rounded hover:bg-red-600 transition font-semibold text-sm">
+                  Limpar Tudo
+                </button>
+              </div>
+            </div>
+          </div>
 
-        const [matriz, setMatriz] = useState({
-          eliminar: [
-            'Terminologia enológica complexa',
-            'Qualidades de envelhecimento',
-            'Marketing acima da linha'
-          ],
-          reduzir: [
-            'Distinções e qualidades do vinho',
-            'Variedade de vinhos',
-            'Prestígio do vinhedo'
-          ],
-          elevar: [
-            'Preço versus vinhos econômicos',
-            'Envolvimento das lojas de varejo'
-          ],
-          criar: [
-            'Facilidade de beber',
-            'Facilidade de seleção',
-            'Diversão e aventura'
-          ]
-        });
+          <div class="bg-blue-50 border-l-4 border-blue-500 rounded p-3">
+            <p class="text-sm text-gray-700">
+              <span class="font-bold text-blue-900">💡 Exemplo Yellow Tail:</span>
+              &nbsp;Caso clássico do livro pré-carregado. Use <strong>Limpar Tudo</strong> para começar do zero.
+            </p>
+          </div>
 
-        const [inputEliminar, setInputEliminar] = useState('');
-        const [inputReduzir, setInputReduzir] = useState('');
-        const [inputElevar, setInputElevar] = useState('');
-        const [inputCriar, setInputCriar] = useState('');
+          <div id="exportArea" class="bg-white p-0">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4" style="min-height:520px">
+              <!-- Quadros -->
+              <div class="bg-white rounded-lg shadow-md p-4 border-t-4 border-red-500 flex flex-col">
+                <div class="flex items-center gap-2 mb-2">
+                  <i data-lucide="trash-2" class="text-red-500 icon"></i>
+                  <h3 class="text-lg font-bold text-red-500">ELIMINAR</h3>
+                </div>
+                <p class="text-xs text-gray-600 mb-3 italic">Fatores a serem eliminados</p>
+                <div class="mb-3 flex gap-2">
+                  <input id="in-eliminar" type="text" placeholder="Digite e pressione Enter"
+                         class="flex-1 p-2 border rounded text-sm focus:outline-none focus:ring-2 focus:ring-red-500 border-red-500" />
+                  <button id="add-eliminar" class="px-3 py-2 text-white rounded bg-red-500 hover:bg-red-600">
+                    <i data-lucide="plus-circle" class="icon"></i>
+                  </button>
+                </div>
+                <ul id="list-eliminar" class="space-y-1"></ul>
+                <div class="mt-2 text-xs text-gray-500 text-right pt-2 border-t"><span id="count-eliminar">0</span> itens</div>
+              </div>
 
-        // Ativa ícones Lucide após render
-        useEffect(() => {
-          if (window.lucide && typeof window.lucide.createIcons === 'function') {
-            window.lucide.createIcons();
-          }
-        });
+              <div class="bg-white rounded-lg shadow-md p-4 border-t-4 border-orange-500 flex flex-col">
+                <div class="flex items-center gap-2 mb-2">
+                  <i data-lucide="trending-down" class="text-orange-500 icon"></i>
+                  <h3 class="text-lg font-bold text-orange-500">REDUZIR</h3>
+                </div>
+                <p class="text-xs text-gray-600 mb-3 italic">Reduzir bem abaixo do padrão</p>
+                <div class="mb-3 flex gap-2">
+                  <input id="in-reduzir" type="text" placeholder="Digite e pressione Enter"
+                         class="flex-1 p-2 border rounded text-sm focus:outline-none focus:ring-2 focus:ring-orange-500 border-orange-500" />
+                  <button id="add-reduzir" class="px-3 py-2 text-white rounded bg-orange-500 hover:bg-orange-600">
+                    <i data-lucide="plus-circle" class="icon"></i>
+                  </button>
+                </div>
+                <ul id="list-reduzir" class="space-y-1"></ul>
+                <div class="mt-2 text-xs text-gray-500 text-right pt-2 border-t"><span id="count-reduzir">0</span> itens</div>
+              </div>
 
-        const adicionarItem = (categoria) => {
-          const inputs = {
-            eliminar: [inputEliminar, setInputEliminar],
-            reduzir: [inputReduzir, setInputReduzir],
-            elevar: [inputElevar, setInputElevar],
-            criar: [inputCriar, setInputCriar],
-          };
-          const [valor, setter] = inputs[categoria] || ['' , () => {}];
-          if (valor.trim()) {
-            setMatriz(prev => ({ ...prev, [categoria]: [...prev[categoria], valor.trim()] }));
-            setter('');
-          }
-        };
+              <div class="bg-white rounded-lg shadow-md p-4 border-t-4 border-green-500 flex flex-col">
+                <div class="flex items-center gap-2 mb-2">
+                  <i data-lucide="trending-up" class="text-green-500 icon"></i>
+                  <h3 class="text-lg font-bold text-green-500">ELEVAR</h3>
+                </div>
+                <p class="text-xs text-gray-600 mb-3 italic">Elevar muito acima do padrão</p>
+                <div class="mb-3 flex gap-2">
+                  <input id="in-elevar" type="text" placeholder="Digite e pressione Enter"
+                         class="flex-1 p-2 border rounded text-sm focus:outline-none focus:ring-2 focus:ring-green-500 border-green-500" />
+                  <button id="add-elevar" class="px-3 py-2 text-white rounded bg-green-500 hover:bg-green-600">
+                    <i data-lucide="plus-circle" class="icon"></i>
+                  </button>
+                </div>
+                <ul id="list-elevar" class="space-y-1"></ul>
+                <div class="mt-2 text-xs text-gray-500 text-right pt-2 border-t"><span id="count-elevar">0</span> itens</div>
+              </div>
 
-        const removerItem = (categoria, index) => {
-          setMatriz(prev => ({
-            ...prev,
-            [categoria]: prev[categoria].filter((_, i) => i !== index),
-          }));
-        };
+              <div class="bg-white rounded-lg shadow-md p-4 border-t-4 border-blue-500 flex flex-col">
+                <div class="flex items-center gap-2 mb-2">
+                  <i data-lucide="plus-circle" class="text-blue-500 icon"></i>
+                  <h3 class="text-lg font-bold text-blue-500">CRIAR</h3>
+                </div>
+                <p class="text-xs text-gray-600 mb-3 italic">Novos fatores de valor</p>
+                <div class="mb-3 flex gap-2">
+                  <input id="in-criar" type="text" placeholder="Digite e pressione Enter"
+                         class="flex-1 p-2 border rounded text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 border-blue-500" />
+                  <button id="add-criar" class="px-3 py-2 text-white rounded bg-blue-500 hover:bg-blue-600">
+                    <i data-lucide="plus-circle" class="icon"></i>
+                  </button>
+                </div>
+                <ul id="list-criar" class="space-y-1"></ul>
+                <div class="mt-2 text-xs text-gray-500 text-right pt-2 border-t"><span id="count-criar">0</span> itens</div>
+              </div>
+            </div>
 
-        const resetarYellowTail = () => {
-          setNomeGrupo('Exemplo do Livro');
-          setProposta('Yellow Tail - Vinhos');
-          setMatriz({
-            eliminar: [
-              'Terminologia enológica complexa',
-              'Qualidades de envelhecimento',
-              'Marketing acima da linha'
-            ],
-            reduzir: [
-              'Distinções e qualidades do vinho',
-              'Variedade de vinhos',
-              'Prestígio do vinhedo'
-            ],
-            elevar: [
-              'Preço versus vinhos econômicos',
-              'Envolvimento das lojas de varejo'
-            ],
-            criar: [
-              'Facilidade de beber',
-              'Facilidade de seleção',
-              'Diversão e aventura'
-            ]
+            <div class="bg-white rounded-lg shadow-md p-3 mt-4">
+              <div class="flex items-center justify-between">
+                <span class="text-sm font-medium text-gray-700">Resumo:</span>
+                <div class="flex flex-wrap gap-4 text-sm">
+                  <span class="text-red-600 font-bold"><span id="count-eliminar-inline">0</span> Eliminar</span>
+                  <span class="text-orange-600 font-bold"><span id="count-reduzir-inline">0</span> Reduzir</span>
+                  <span class="text-green-600 font-bold"><span id="count-elevar-inline">0</span> Elevar</span>
+                  <span class="text-blue-600 font-bold"><span id="count-criar-inline">0</span> Criar</span>
+                  <span class="text-gray-600">| <strong>Total:</strong> <span id="count-total">0</span></span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <script>
+      // Estado da aplicação (vanilla)
+      const state = {
+        nomeGrupo: 'Exemplo do Livro',
+        proposta: 'Yellow Tail - Vinhos',
+        eliminar: [
+          'Terminologia enológica complexa',
+          'Qualidades de envelhecimento',
+          'Marketing acima da linha'
+        ],
+        reduzir: [
+          'Distinções e qualidades do vinho',
+          'Variedade de vinhos',
+          'Prestígio do vinhedo'
+        ],
+        elevar: [
+          'Preço versus vinhos econômicos',
+          'Envolvimento das lojas de varejo'
+        ],
+        criar: [
+          'Facilidade de beber',
+          'Facilidade de seleção',
+          'Diversão e aventura'
+        ]
+      };
+
+      // Elementos
+      const $ = (sel) => document.querySelector(sel);
+      const lists = {
+        eliminar: $('#list-eliminar'),
+        reduzir: $('#list-reduzir'),
+        elevar: $('#list-elevar'),
+        criar: $('#list-criar'),
+      };
+      const counters = {
+        eliminar: $('#count-eliminar'),
+        reduzir: $('#count-reduzir'),
+        elevar: $('#count-elevar'),
+        criar: $('#count-criar'),
+        eliminarInline: $('#count-eliminar-inline'),
+        reduzirInline: $('#count-reduzir-inline'),
+        elevarInline: $('#count-elevar-inline'),
+        criarInline: $('#count-criar-inline'),
+        total: $('#count-total')
+      };
+
+      function renderList(cat) {
+        const ul = lists[cat];
+        ul.innerHTML = '';
+        state[cat].forEach((item, idx) => {
+          const li = document.createElement('li');
+          li.className = 'flex items-start gap-2 group bg-gray-50 p-2 rounded hover:bg-gray-100 text-sm';
+          const bullet = document.createElement('span');
+          bullet.className = ({
+            eliminar: 'text-red-500',
+            reduzir: 'text-orange-500',
+            elevar: 'text-green-500',
+            criar: 'text-blue-500',
+          })[cat] + ' font-bold';
+          bullet.textContent = '•';
+          const text = document.createElement('span');
+          text.className = 'flex-1 text-gray-700';
+          text.textContent = item;
+          const btn = document.createElement('button');
+          btn.className = 'text-gray-400 hover:text-red-600';
+          btn.title = 'Remover';
+          btn.innerHTML = '<i data-lucide="trash-2"></i>';
+          btn.addEventListener('click', () => {
+            state[cat].splice(idx, 1);
+            renderAll();
           });
-          setInputEliminar('');
-          setInputReduzir('');
-          setInputElevar('');
-          setInputCriar('');
-        };
-
-        const limparTudo = () => {
-          setMatriz({ eliminar: [], reduzir: [], elevar: [], criar: [] });
-          setInputEliminar(''); setInputReduzir(''); setInputElevar(''); setInputCriar('');
-          setNomeGrupo(''); setProposta('');
-        };
-
-        const exportarPNG = async () => {
-          const element = exportRef.current;
-          if (!element) { alert('Erro ao localizar o elemento para exportação.'); return; }
-          try {
-            const canvas = await window.html2canvas(element, {
-              backgroundColor: '#ffffff',
-              scale: 2,
-              logging: false,
-              useCORS: true,
-              windowWidth: 1200,
-              windowHeight: 900
-            });
-            canvas.toBlob((blob) => {
-              const url = URL.createObjectURL(blob);
-              const link = document.createElement('a');
-              link.download = `matriz-oceano-azul-${(nomeGrupo || 'grupo').replace(/\\s+/g, '-')}.png`;
-              link.href = url;
-              document.body.appendChild(link);
-              link.click();
-              document.body.removeChild(link);
-              URL.revokeObjectURL(url);
-            });
-          } catch (err) {
-            console.error(err);
-            alert('Erro ao exportar. Tente novamente.');
-          }
-        };
-
-        const totalItens = matriz.eliminar.length + matriz.reduzir.length + matriz.elevar.length + matriz.criar.length;
-
-        const Quadro = ({ titulo, cor, icone, placeholder, valor, onChange, onAdd, itens, onRemover }) => (
-          <div className={`bg-white rounded-lg shadow-md p-4 border-t-4 ${cor} flex flex-col`}>
-            <div className="flex items-center gap-2 mb-2">
-              <i data-lucide={icone} className={`${cor.replace('border-','text-')}`}></i>
-              <h3 className={`text-lg font-bold ${cor.replace('border-','text-')}`}>{titulo}</h3>
-            </div>
-            <p className="text-xs text-gray-600 mb-3 italic">{placeholder}</p>
-
-            <div className="mb-3 flex gap-2">
-              <input
-                type="text"
-                value={valor}
-                onChange={(e) => onChange(e.target.value)}
-                onKeyDown={(e) => e.key === 'Enter' && onAdd()}
-                placeholder="Digite e pressione Enter"
-                className={`flex-1 p-2 border rounded text-sm focus:outline-none focus:ring-2 ${cor.includes('red') ? 'focus:ring-red-500 border-red-500' : ''} ${cor.includes('orange') ? 'focus:ring-orange-500 border-orange-500' : ''} ${cor.includes('green') ? 'focus:ring-green-500 border-green-500' : ''} ${cor.includes('blue') ? 'focus:ring-blue-500 border-blue-500' : ''}`}
-              />
-              <button
-                onClick={onAdd}
-                disabled={!valor.trim()}
-                className={`px-3 py-2 text-white rounded disabled:opacity-50 ${cor.includes('red') ? 'bg-red-500 hover:bg-red-600' : ''} ${cor.includes('orange') ? 'bg-orange-500 hover:bg-orange-600' : ''} ${cor.includes('green') ? 'bg-green-500 hover:bg-green-600' : ''} ${cor.includes('blue') ? 'bg-blue-500 hover:bg-blue-600' : ''}`}
-                title="Adicionar"
-              >
-                <i data-lucide="plus-circle"></i>
-              </button>
-            </div>
-
-            <div className="flex-1 overflow-y-auto">
-              <ul className="space-y-1">
-                {itens.length === 0 ? (
-                  <li className="text-gray-400 italic text-xs text-center py-4">Nenhum item</li>
-                ) : (
-                  itens.map((item, index) => (
-                    <li key={index} className="flex items-start gap-2 group bg-gray-50 p-2 rounded hover:bg-gray-100 text-sm">
-                      <span className={`${cor.replace('border-','text-')} font-bold`}>•</span>
-                      <span className="flex-1 text-gray-700">{item}</span>
-                      <button onClick={() => onRemover(index)} className="text-gray-400 hover:text-red-600" title="Remover">
-                        <i data-lucide="trash-2"></i>
-                      </button>
-                    </li>
-                  ))
-                )}
-              </ul>
-            </div>
-
-            <div className="mt-2 text-xs text-gray-500 text-right pt-2 border-t">
-              {itens.length} {itens.length === 1 ? 'item' : 'itens'}
-            </div>
-          </div>
-        );
-
-        const DashboardExport = () => (
-          <div ref={exportRef} className="bg-white p-8" style={{ width: '1200px' }}>
-            <div className="text-center mb-6">
-              <h1 className="text-3xl font-bold text-gray-800 mb-2">Matriz das 4 Ações - Oceano Azul</h1>
-              {nomeGrupo && <p className="text-xl text-gray-600">Grupo: {nomeGrupo}</p>}
-              {proposta && <p className="text-lg text-blue-600 mt-2">Proposta: {proposta}</p>}
-            </div>
-
-            <div className="grid grid-cols-2 gap-6">
-              <div className="border-4 border-red-500 rounded-lg p-4">
-                <div className="flex items-center gap-2 mb-3">
-                  <i data-lucide="trash-2" className="text-red-500"></i>
-                  <h2 className="text-2xl font-bold text-red-500">ELIMINAR</h2>
-                </div>
-                <p className="text-sm text-gray-600 mb-3 italic">Fatores a serem eliminados</p>
-                <ul className="space-y-2">
-                  {matriz.eliminar.length === 0 ? (
-                    <li className="text-gray-400 italic">Nenhum item</li>
-                  ) : (
-                    matriz.eliminar.map((item, i) => (
-                      <li key={i} className="flex gap-2">
-                        <span className="text-red-500 font-bold">•</span>
-                        <span className="text-gray-700">{item}</span>
-                      </li>
-                    ))
-                  )}
-                </ul>
-              </div>
-
-              <div className="border-4 border-orange-500 rounded-lg p-4">
-                <div className="flex items-center gap-2 mb-3">
-                  <i data-lucide="trending-down" className="text-orange-500"></i>
-                  <h2 className="text-2xl font-bold text-orange-500">REDUZIR</h2>
-                </div>
-                <p className="text-sm text-gray-600 mb-3 italic">Reduzir bem abaixo do padrão</p>
-                <ul className="space-y-2">
-                  {matriz.reduzir.length === 0 ? (
-                    <li className="text-gray-400 italic">Nenhum item</li>
-                  ) : (
-                    matriz.reduzir.map((item, i) => (
-                      <li key={i} className="flex gap-2">
-                        <span className="text-orange-500 font-bold">•</span>
-                        <span className="text-gray-700">{item}</span>
-                      </li>
-                    ))
-                  )}
-                </ul>
-              </div>
-
-              <div className="border-4 border-green-500 rounded-lg p-4">
-                <div className="flex items-center gap-2 mb-3">
-                  <i data-lucide="trending-up" className="text-green-500"></i>
-                  <h2 className="text-2xl font-bold text-green-500">ELEVAR</h2>
-                </div>
-                <p className="text-sm text-gray-600 mb-3 italic">Elevar muito acima do padrão</p>
-                <ul className="space-y-2">
-                  {matriz.elevar.length === 0 ? (
-                    <li className="text-gray-400 italic">Nenhum item</li>
-                  ) : (
-                    matriz.elevar.map((item, i) => (
-                      <li key={i} className="flex gap-2">
-                        <span className="text-green-500 font-bold">•</span>
-                        <span className="text-gray-700">{item}</span>
-                      </li>
-                    ))
-                  )}
-                </ul>
-              </div>
-
-              <div className="border-4 border-blue-500 rounded-lg p-4">
-                <div className="flex items-center gap-2 mb-3">
-                  <i data-lucide="plus-circle" className="text-blue-500"></i>
-                  <h2 className="text-2xl font-bold text-blue-500">CRIAR</h2>
-                </div>
-                <p className="text-sm text-gray-600 mb-3 italic">Novos fatores de valor</p>
-                <ul className="space-y-2">
-                  {matriz.criar.length === 0 ? (
-                    <li className="text-gray-400 italic">Nenhum item</li>
-                  ) : (
-                    matriz.criar.map((item, i) => (
-                      <li key={i} className="flex gap-2">
-                        <span className="text-blue-500 font-bold">•</span>
-                        <span className="text-gray-700">{item}</span>
-                      </li>
-                    ))
-                  )}
-                </ul>
-              </div>
-            </div>
-
-            <div className="mt-6 text-center text-gray-500 text-sm">
-              <p>Baseado em "A Estratégia do Oceano Azul" - Kim &amp; Mauborgne</p>
-              <p className="mt-1">{new Date().toLocaleDateString('pt-BR')}</p>
-            </div>
-          </div>
-        );
-
-        return (
-          <div>
-            <div className="w-full h-screen bg-gray-50 overflow-hidden flex flex-col">
-              <div className="bg-gradient-to-r from-blue-600 to-purple-600 text-white shadow-lg p-4">
-                <div className="max-w-7xl mx-auto">
-                  <div className="flex items-center justify-center gap-2 mb-1">
-                    <i data-lucide="lightbulb" width="28" height="28"></i>
-                    <h1 className="text-2xl font-bold">Matriz das 4 Ações - Oceano Azul</h1>
-                  </div>
-                  <p className="text-center text-sm opacity-90">Construa sua Estratégia de Oceano Azul</p>
-                </div>
-              </div>
-
-              <div className="flex-1 overflow-y-auto p-4">
-                <div className="max-w-7xl mx-auto space-y-4">
-
-                  <div className="bg-white rounded-lg shadow-md p-4">
-                    <div className="grid grid-cols-1 md:grid-cols-4 gap-3">
-                      <div>
-                        <label className="block text-sm font-medium mb-1 text-gray-700">Nome do Grupo:</label>
-                        <input
-                          type="text"
-                          value={nomeGrupo}
-                          onChange={(e) => setNomeGrupo(e.target.value)}
-                          placeholder="Ex: Grupo A"
-                          className="w-full p-2 border rounded text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-                        />
-                      </div>
-
-                      <div>
-                        <label className="block text-sm font-medium mb-1 text-gray-700">Proposta:</label>
-                        <input
-                          type="text"
-                          value={proposta}
-                          onChange={(e) => setProposta(e.target.value)}
-                          placeholder="Ex: Supermercado Premium"
-                          className="w-full p-2 border rounded text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-                        />
-                      </div>
-
-                      <div className="flex items-end gap-2">
-                        <button
-                          onClick={exportarPNG}
-                          disabled={totalItens === 0}
-                          className={`flex-1 icon-btn justify-center p-2 rounded font-semibold text-sm transition ${totalItens === 0 ? 'bg-gray-200 text-gray-400 cursor-not-allowed' : 'bg-green-500 text-white hover:bg-green-600'}`}
-                        >
-                          <i data-lucide="download"></i>
-                          Exportar
-                        </button>
-                        <button
-                          onClick={resetarYellowTail}
-                          className="p-2 rounded bg-blue-100 text-blue-600 hover:bg-blue-200 transition"
-                          title="Resetar Yellow Tail"
-                        >
-                          <i data-lucide="refresh-cw"></i>
-                        </button>
-                      </div>
-
-                      <div className="flex items-end">
-                        <button
-                          onClick={limparTudo}
-                          className="w-full p-2 bg-red-500 text-white rounded hover:bg-red-600 transition font-semibold text-sm"
-                        >
-                          Limpar Tudo
-                        </button>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className="bg-blue-50 border-l-4 border-blue-500 rounded p-3">
-                    <p className="text-sm text-gray-700">
-                      <span className="font-bold text-blue-900">💡 Exemplo Yellow Tail:</span>
-                      &nbsp;Caso clássico do livro pré-carregado. Use <strong>Limpar Tudo</strong> para começar do zero.
-                    </p>
-                  </div>
-
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4" style={{ minHeight: '520px' }}>
-                    <Quadro
-                      titulo="ELIMINAR" cor="border-red-500"
-                      icone="trash-2" placeholder="Fatores a serem eliminados"
-                      valor={inputEliminar} onChange={setInputEliminar}
-                      onAdd={() => adicionarItem('eliminar')}
-                      itens={matriz.eliminar} onRemover={(i) => removerItem('eliminar', i)}
-                    />
-                    <Quadro
-                      titulo="REDUZIR" cor="border-orange-500"
-                      icone="trending-down" placeholder="Reduzir bem abaixo do padrão"
-                      valor={inputReduzir} onChange={setInputReduzir}
-                      onAdd={() => adicionarItem('reduzir')}
-                      itens={matriz.reduzir} onRemover={(i) => removerItem('reduzir', i)}
-                    />
-                    <Quadro
-                      titulo="ELEVAR" cor="border-green-500"
-                      icone="trending-up" placeholder="Elevar muito acima do padrão"
-                      valor={inputElevar} onChange={setInputElevar}
-                      onAdd={() => adicionarItem('elevar')}
-                      itens={matriz.elevar} onRemover={(i) => removerItem('elevar', i)}
-                    />
-                    <Quadro
-                      titulo="CRIAR" cor="border-blue-500"
-                      icone="plus-circle" placeholder="Novos fatores de valor"
-                      valor={inputCriar} onChange={setInputCriar}
-                      onAdd={() => adicionarItem('criar')}
-                      itens={matriz.criar} onRemover={(i) => removerItem('criar', i)}
-                    />
-                  </div>
-
-                  <div className="bg-white rounded-lg shadow-md p-3">
-                    <div className="flex items-center justify-between">
-                      <span className="text-sm font-medium text-gray-700">Resumo:</span>
-                      <div className="flex flex-wrap gap-4 text-sm">
-                        <span className="text-red-600 font-bold">{matriz.eliminar.length} Eliminar</span>
-                        <span className="text-orange-600 font-bold">{matriz.reduzir.length} Reduzir</span>
-                        <span className="text-green-600 font-bold">{matriz.elevar.length} Elevar</span>
-                        <span className="text-blue-600 font-bold">{matriz.criar.length} Criar</span>
-                        <span className="text-gray-600">| <strong>Total:</strong> {totalItens}</span>
-                      </div>
-                    </div>
-                  </div>
-
-                </div>
-              </div>
-            </div>
-
-            {/* Área oculta para exportação */}
-            <div style={{ position: 'absolute', left: '-9999px', top: '-9999px', width: '1200px' }}>
-              <DashboardExport />
-            </div>
-          </div>
-        );
+          li.appendChild(bullet); li.appendChild(text); li.appendChild(btn);
+          ul.appendChild(li);
+        });
       }
 
-      const root = ReactDOM.createRoot(document.getElementById('root'));
-      root.render(<MatrizOceanoAzul />);
+      function renderCounts() {
+        ['eliminar','reduzir','elevar','criar'].forEach(cat => {
+          counters[cat].textContent = state[cat].length;
+          counters[cat + 'Inline'].textContent = state[cat].length;
+        });
+        counters.total.textContent = state.eliminar.length + state.reduzir.length + state.elevar.length + state.criar.length;
+        // Atualiza ícones lucide dentro das listas renderizadas
+        if (window.lucide && typeof window.lucide.createIcons === 'function') {
+          window.lucide.createIcons();
+        }
+      }
+
+      function renderAll() {
+        renderList('eliminar');
+        renderList('reduzir');
+        renderList('elevar');
+        renderList('criar');
+        renderCounts();
+      }
+
+      function resetYellowTail() {
+        state.nomeGrupo = 'Exemplo do Livro';
+        state.proposta = 'Yellow Tail - Vinhos';
+        state.eliminar = [
+          'Terminologia enológica complexa',
+          'Qualidades de envelhecimento',
+          'Marketing acima da linha'
+        ];
+        state.reduzir = [
+          'Distinções e qualidades do vinho',
+          'Variedade de vinhos',
+          'Prestígio do vinhedo'
+        ];
+        state.elevar = [
+          'Preço versus vinhos econômicos',
+          'Envolvimento das lojas de varejo'
+        ];
+        state.criar = [
+          'Facilidade de beber',
+          'Facilidade de seleção',
+          'Diversão e aventura'
+        ];
+        $('#nomeGrupo').value = state.nomeGrupo;
+        $('#proposta').value = state.proposta;
+        renderAll();
+      }
+
+      function clearAll() {
+        state.eliminar = [];
+        state.reduzir = [];
+        state.elevar = [];
+        state.criar = [];
+        state.nomeGrupo = '';
+        state.proposta = '';
+        $('#nomeGrupo').value = '';
+        $('#proposta').value = '';
+        renderAll();
+      }
+
+      function addFromInput(cat, inputId) {
+        const inp = $(inputId);
+        const val = inp.value.trim();
+        if (!val) return;
+        state[cat].push(val);
+        inp.value = '';
+        renderAll();
+        inp.focus();
+      }
+
+      // Eventos
+      $('#btnReset').addEventListener('click', resetYellowTail);
+      $('#btnLimpar').addEventListener('click', clearAll);
+      $('#btnExportar').addEventListener('click', async () => {
+        try {
+          const node = $('#exportArea');
+          const canvas = await html2canvas(node, { backgroundColor: '#ffffff', scale: 2, useCORS: true });
+          canvas.toBlob((blob) => {
+            const url = URL.createObjectURL(blob);
+            const link = document.createElement('a');
+            const nome = ($('#nomeGrupo').value || 'grupo').replace(/\s+/g, '-');
+            link.download = `matriz-oceano-azul-${nome}.png`;
+            link.href = url;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            URL.revokeObjectURL(url);
+          });
+        } catch (e) {
+          console.error(e);
+          alert('Erro ao exportar. Tente novamente.');
+        }
+      });
+
+      $('#add-eliminar').addEventListener('click', () => addFromInput('eliminar', '#in-eliminar'));
+      $('#add-reduzir').addEventListener('click', () => addFromInput('reduzir', '#in-reduzir'));
+      $('#add-elevar').addEventListener('click', () => addFromInput('elevar', '#in-elevar'));
+      $('#add-criar').addEventListener('click', () => addFromInput('criar', '#in-criar'));
+
+      $('#in-eliminar').addEventListener('keydown', (e) => { if (e.key === 'Enter') addFromInput('eliminar', '#in-eliminar'); });
+      $('#in-reduzir').addEventListener('keydown', (e) => { if (e.key === 'Enter') addFromInput('reduzir', '#in-reduzir'); });
+      $('#in-elevar').addEventListener('keydown', (e) => { if (e.key === 'Enter') addFromInput('elevar', '#in-elevar'); });
+      $('#in-criar').addEventListener('keydown', (e) => { if (e.key === 'Enter') addFromInput('criar', '#in-criar'); });
+
+      // Inicialização
+      window.addEventListener('DOMContentLoaded', () => {
+        if (window.lucide && typeof window.lucide.createIcons === 'function') {
+          window.lucide.createIcons();
+        }
+        $('#nomeGrupo').value = state.nomeGrupo;
+        $('#proposta').value = state.proposta;
+        renderAll();
+      });
     </script>
   </body>
 </html>
